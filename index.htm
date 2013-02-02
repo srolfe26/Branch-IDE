@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Web IDE</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="resources/css/normalize.css">
+        <link rel="stylesheet" href="resources/css/condor/condor-lists.css">
+        <link rel="stylesheet" href="resources/css/condor/condor.css">
+        <link rel="stylesheet" href="resources/css/main.css">
+        
+        <script src="resources/js/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="resources/js/vendor/jquery-1-7-2-ui-1-8-23.js"></script>
+        
+        <!-- Condor Library -->
+        <script src="resources/js/condor/condor-core.js"></script>
+        <script src="resources/js/condor/condor-forms.js"></script>
+        <script src="resources/js/condor/condor-lists.js"></script>
+        
+        <!-- Editor JS -->
+        <script src="resources/js/branch.js"></script>
+        <script src="resources/js/base64_encode.js"></script>
+        <script src="resources/js/ace/ace.js"></script>
+        <script src="resources/js/main.js"></script>
+        <script src="resources/js/branch.js"></script>
+        <script src="resources/js/plugins.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+        <!-- Add your site or application content here -->
+        <div id="content">
+	        <div id="app-container">
+			    <div id="col-left">
+			        <div id="branch-wrapper"></div>
+			        <div id="toolbar">
+			            <ul>
+			                <li id="newfile"></li>
+			                <li id="save"></li>
+			            </ul>
+			        </div>
+			    </div>
+			    <div><input type="hidden" name="activePath" /> </div>
+			    <div id="editor">var welcome="hello world!";</div>
+			</div>
+        </div>
+    </body>
+</html>
