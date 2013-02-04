@@ -1,7 +1,7 @@
 <?php
 
 class webide {
-	public function open_file ($path) {
+	public static function open_file ($path) {
 	 /**   
       * open specified file for edit
       *
@@ -22,7 +22,7 @@ class webide {
         return $file_content;
 	}
 	
-	public function save_file ($path, $contents) {
+	public static function save_file ($path, $contents) {
 		/**
 	     * creates/saves new or existing file with the specified name at the specified location, and content as specified
 	     *   
@@ -46,12 +46,12 @@ class webide {
    		return $status;
 	}
 	
-	public function get_dir_list ($path) {
+	public static function get_dir_list ($path) {
 		/**
 		 * lists the directories and files in a specified path
 		 * 
          * @param path - directory path to provide a listing
-         * @return returns list of lists
+         * @return returns record array
 		 *
     	 * @author Stuart Roskelley (runfaj@gmail.com)
     	 * @creation-date 2013-2-2
@@ -60,10 +60,13 @@ class webide {
 		$recordsArr = array();
 		if (empty($path)) {
 			/// handle getting proper path
+			$path = $_SERVER['DOCUMENT_ROOT'] . '/';
 		}
 		if($handle = opendir($path)) {
 			
 			while (($entry = readdir($handle)) != false) {
+				if ($entry == '.' || $entry == '..') continue;
+				$entry = $path . $entry;
 				if (is_dir($entry)) {
 					$filetype = "";
 					$type = "dir";
@@ -73,8 +76,13 @@ class webide {
 					$type = "file";
 					$itemcnt = 0;
 				}
+				/*echo "$type
+				";
+				echo "$entry
+				";*/
 				$name = basename($entry);
-				$modified = date('Y/m/d h:i:s a', time());
+				$modified = date('Y-m-d h:i:s a', time());
+				if ($type != 'file') $entry = $entry . '/'; 
 				$rec = array(
 					"path" 		=> $entry,
 					"name" 		=> $name,
@@ -85,17 +93,16 @@ class webide {
 				);
 				array_push($recordsArr, $rec);
 			}
-			closedir($path);
+			closedir($handle);
 		}
 		
-		$result = util::response($recordsArr);
-		return $result;
+		return $recordsArr;
 	}
 
 }
 
 class util {
-	public function response($recs,$errorText) {
+	public static function response($recs,$errorText) {
 		/**
 		 * takes an array of recs and wraps in a response object and json encodes.
 		 * each record MUST be an associative array
@@ -107,6 +114,7 @@ class util {
 		 * @creation-date 2013-2-2
 		 */
 		
+		if(empty($recs)) $recs = array();
 		$result = array();
 		$success = true;
 		if (!empty($errorText)) {
@@ -118,7 +126,7 @@ class util {
 		}
 		$result = json_encode($result);
 		
-		return $result;
+		echo $result;
 	}
 }
 

@@ -22,9 +22,11 @@ $(document).ready(function(){
        dfltSrchTxt:     'Filter Branch...',
        addChildren:     function(nd){
                             if(nd.depth == 0){
-                                $.getJSON("data/file-interactions",{xaction:'read'},function(list){ nd.processKids(list.payload); });
+                                //$.getJSON("data/file-interactions",{xaction:'read'},function(list){ nd.processKids(list.payload); });
+                                $.getJSON("php/file-interactions.php",{xaction:'read'},function(list){ nd.processKids(list.payload); });
                             }else if(nd.depth > 0){
-                                $.getJSON("data/file-interactions",{xaction:'read', path:nd.data.path},function(list){ nd.processKids(list.payload); });
+                                //$.getJSON("data/file-interactions",{xaction:'read', path:nd.data.path},function(list){ nd.processKids(list.payload); });
+                                $.getJSON("php/file-interactions.php",{xaction:'read', path:nd.data.path},function(list){ nd.processKids(list.payload); });
                             }
                         },
        tplt:            '<a href="javascript:void(0);" class="dir-item ftype-{type}">' +
@@ -55,7 +57,9 @@ $(document).ready(function(){
                                            sh:      'ace/mode/sh'
                                        };
                                        
-                                   $.get("data/editor-interactions",{xaction:'read', path:nd.data.path}, function(d){
+                                   // p = "data/editor-interactions";
+                                   p = "php/editor-interactions.php";
+                                   $.get(p,{xaction:'read', path:nd.data.path}, function(d){
                                        //assign the editor mode, or default to text if nothing else exists
                                        if(!editorModes.hasOwnProperty(ftype)) ftype = 'text';
                                        
@@ -123,7 +127,8 @@ $(document).ready(function(){
         
         steve.bbar[0].click = function(){
             var newFilePath = mainEdit.currentPath + newFile.val();
-            $.post("data/editor-interactions",{xaction:'create',path:newFilePath});
+            //$.post("data/editor-interactions",{xaction:'create',path:newFilePath});
+            $.post("php/editor-interactions.php",{xaction:'create',path:newFilePath});
             steve.close();
         };
         
@@ -169,7 +174,8 @@ function IDEMgr (editorEl,ftype){
             try{
                 var fileContent = editor.getValue();
                 var activePath = editor._parent.activeSession.path;
-                $.post("data/editor-interactions",{xaction:'update',path:activePath,content:base64_encode(fileContent)});
+                //$.post("data/editor-interactions",{xaction:'update',path:activePath,content:base64_encode(fileContent)});
+                $.post("php/editor-interactions.php",{xaction:'update',path:activePath,content:base64_encode(fileContent)});
             }catch(e){
                 Condor.errRpt("There is no file to save. Fool.");
             }
