@@ -62,38 +62,40 @@ class webide {
 			/// handle getting proper path
 			$path = $_SERVER['DOCUMENT_ROOT'] . '/';
 		}
-		if($handle = opendir($path)) {
-			
-			while (($entry = readdir($handle)) != false) {
-				if ($entry == '.' || $entry == '..') continue;
-				$entry = $path . $entry;
-				if (is_dir($entry)) {
-					$filetype = "";
-					$type = "dir";
-					$itemcnt = count(glob($entry . "*"));;
-				} else if (is_file($entry)) {
-					$filetype = pathinfo($entry, PATHINFO_EXTENSION);
-					$type = "file";
-					$itemcnt = 0;
+		if (is_dir($path)) {
+			if($handle = opendir($path)) {
+				
+				while (($entry = readdir($handle)) != false) {
+					if ($entry == '.' || $entry == '..') continue;
+					$entry = $path . $entry;
+					if (is_dir($entry)) {
+						$filetype = "";
+						$type = "dir";
+						$itemcnt = count(glob($entry . "*"));;
+					} else if (is_file($entry)) {
+						$filetype = pathinfo($entry, PATHINFO_EXTENSION);
+						$type = "file";
+						$itemcnt = 0;
+					}
+					/*echo "$type
+					";
+					echo "$entry
+					";*/
+					$name = basename($entry);
+					$modified = date('Y-m-d h:i:s a', time());
+					if ($type != 'file') $entry = $entry . '/'; 
+					$rec = array(
+						"path" 		=> $entry,
+						"name" 		=> $name,
+						"type"  	=> $type,
+						"items" 	=> $itemcnt,
+						"modified"	=> $modified,
+						"filetype" 	=> $filetype
+					);
+					array_push($recordsArr, $rec);
 				}
-				/*echo "$type
-				";
-				echo "$entry
-				";*/
-				$name = basename($entry);
-				$modified = date('Y-m-d h:i:s a', time());
-				if ($type != 'file') $entry = $entry . '/'; 
-				$rec = array(
-					"path" 		=> $entry,
-					"name" 		=> $name,
-					"type"  	=> $type,
-					"items" 	=> $itemcnt,
-					"modified"	=> $modified,
-					"filetype" 	=> $filetype
-				);
-				array_push($recordsArr, $rec);
+				closedir($handle);
 			}
-			closedir($handle);
 		}
 		
 		return $recordsArr;
@@ -124,6 +126,7 @@ class util {
 			$result['total'] 	= count($recs);
 			$result['payload']	= $recs;
 		}
+		$result['success'] = $success;
 		$result = json_encode($result);
 		
 		echo $result;

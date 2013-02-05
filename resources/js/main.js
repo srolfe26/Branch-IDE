@@ -108,6 +108,10 @@ $(document).ready(function(){
     
     $('ul li#save').on('click',mainEdit.saveFunc());
     
+    $('ul li#github').on('click',function(){
+    	// show menu
+    });
+    
     $('ul li#newfile').on('click',function(){
         var newFile = new Condor.textFrmObj({id:'ide_filename', passedCls: 'condor-modal-form-item'}); 
         var steve = new Condor.modalWindow({
