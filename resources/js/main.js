@@ -109,7 +109,23 @@ $(document).ready(function(){
     $('ul li#save').on('click',mainEdit.saveFunc());
     
     $('ul li#github').on('click',function(){
-    	// show menu
+    	var d = $(this),
+    		s = $('ul li#save'),
+    		n = $('ul li#newfile'),
+    		c = $('ul li#commit-all'),
+    		u = $('ul li#update-all');
+    	d.toggleClass('selected');
+    	if (d.hasClass('selected')){
+    		n.hide();
+    		s.hide();
+    		c.show();
+    		u.show();
+    	} else {
+    		n.show();
+    		s.show();
+    		c.hide();
+    		u.hide();
+    	}
     });
     
     $('ul li#newfile').on('click',function(){
@@ -181,7 +197,9 @@ function IDEMgr (editorEl,ftype){
                 //$.post("data/editor-interactions",{xaction:'update',path:activePath,content:base64_encode(fileContent)});
                 $.post("php/editor-interactions.php",{xaction:'update',path:activePath,content:base64_encode(fileContent)});
             }catch(e){
-                Condor.errRpt("There is no file to save. Fool.");
+                // commented out because it's super annoying to start the page with that popping up
+                //Condor.errRpt("There is no file to save. Fool.");
+                console.log('There is no file to save. Fool.');
             }
         },
         getSession:function(id){

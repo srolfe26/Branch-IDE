@@ -143,7 +143,12 @@ textarea {
 #toolbar ul li {width:16px; height:16px; background: url(../img/icon-sprites.png) 0 0 no-repeat; text-indent: -400em; list-style:none; float:right; margin:6px; cursor:pointer;}
 #toolbar ul li#save { background-position: -48px 0;}
 #toolbar ul li:hover { background-position-y:-16px; }
-#toolbar ul li#github { width: 21px; height: 20px; background: url(../img/github.png); margin-top: 3px; }
+
+#toolbar ul li#github { width: 21px; height: 20px; background: url(../img/github.png) no-repeat 0 0; margin-top: 3px; }
+#toolbar ul li#github.selected { background-position: -21px 0; }
+
+#toolbar ul li#update-all { width:20px; height:20px; margin:4px; display:none; background: url(../img/update-all.png) no-repeat 0 0; }
+#toolbar ul li#commit-all { width:20px; height:20px; margin:4px; display:none; background: url(../img/commit-all.png) no-repeat 0 0; }
 
 #tab-control {width:200px; min-height:40px; background:#333; border:#777; left:15.33%; top:0; position:absolute; z-index:10000; box-shadow:0 0 10px black; display:none; }
 
