@@ -1,10 +1,12 @@
 <?php
 
+	define('DEFAULT_PATH', $_SERVER['DOCUMENT_ROOT'] . '/');
+	
 	include 'procs/ide-procs.php';
 	//$include('procs/ide-procs.php');
 	$xaction 	= $_GET['xaction'];
 	if (!isset($_GET['path'])) {
-		$path = null;
+		$path = DEFAULT_PATH;
 	} else {
 		$path = $_GET['path'];
 	}

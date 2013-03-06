@@ -32,13 +32,12 @@ class webide {
 	     * @creation-date 2013-2-2
 		 */
     
+		$status = true;
     	if (empty($contents)) { $contents = ""; }
 		if (!empty($path)) {
 			$success = file_put_contents($path, $contents);
 			if ($success === false) {
 				$status = false;
-			} else {
-				
 			}
    		} else {
    			$status = false;
@@ -58,6 +57,7 @@ class webide {
 		 */
 		
 		$recordsArr = array();
+		// should always be passed in, but just in case...
 		if (empty($path)) {
 			/// handle getting proper path
 			$path = $_SERVER['DOCUMENT_ROOT'] . '/';

@@ -15,6 +15,28 @@ $(document).ready(function(){
     
     mainEdit = new IDEMgr('editor');
     editor = mainEdit.editor;
+	
+	function changedIcon() {
+		var me = {
+			currState: 	"saved",
+			el:			$("ul li#status"),
+			setState: 	function(newState) {
+							// options are saved, changed, or loading
+							me.currState = newState;
+							me.setClass(newState);
+						},
+			getState: 	function() {
+							return me.currState;
+						},
+			setClass:	function(newClass) {
+							me.el.attr('class',newClass);
+						}
+		}
+		return me;
+	};
+	
+	var statusIcon = new changedIcon();
+	
     branch = new bjsBranch({
        el:              $("#branch-wrapper"),
        searchMargin:    4,
@@ -47,7 +69,7 @@ $(document).ready(function(){
                                            php:     'ace/mode/php',
                                            cfm:     'ace/mode/coldfusion',
                                            cfml:    'ace/mode/coldfusion',
-                                           txt:    'ace/mode/text',
+                                           txt:     'ace/mode/text',
                                            xml:     'ace/mode/xml',
                                            xsl:     'ace/mode/xml',
                                            info:    'ace/mode/xml',
@@ -106,7 +128,7 @@ $(document).ready(function(){
                         }
     });
     
-    $('ul li#save').on('click',mainEdit.saveFunc());
+    $('ul li#save').on('click',mainEdit.saveFunc);
     
     $('ul li#github').on('click',function(){
     	var d = $(this),
@@ -177,6 +199,8 @@ $(document).ready(function(){
     }
     
     new TabControl();
+	
+	//editor.on('change',statusIcon.setState("changed"));
 });
 
 function IDEMgr (editorEl,ftype){
@@ -190,7 +214,7 @@ function IDEMgr (editorEl,ftype){
         branch:branch,
         currentPath:'',
         activeSession:null,
-        saveFunc:function(editor,editorArr){
+        saveFunc:function(){
             try{
                 var fileContent = editor.getValue();
                 var activePath = editor._parent.activeSession.path;
@@ -199,7 +223,8 @@ function IDEMgr (editorEl,ftype){
             }catch(e){
                 // commented out because it's super annoying to start the page with that popping up
                 //Condor.errRpt("There is no file to save. Fool.");
-                console.log('There is no file to save. Fool.');
+                console.log(e);
+				console.log('There is no file to save. Fool.');
             }
         },
         getSession:function(id){
