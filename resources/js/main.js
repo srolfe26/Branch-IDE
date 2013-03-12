@@ -84,7 +84,6 @@ $(document).ready(function(){
                                    $.get(p,{xaction:'read', path:nd.data.path}, function(d){
                                        //assign the editor mode, or default to text if nothing else exists
                                        if(!editorModes.hasOwnProperty(ftype)) ftype = 'text';
-                                       
                                        var path = nd.data.path.replace(new RegExp(nd.data.name,'g'),'');
                                        mainEdit.newSession({
                                             ftype:editorModes[ftype],
@@ -241,16 +240,38 @@ function IDEMgr (editorEl,ftype){
         newSession:function(args){
             
             var sess = new EditSession(args.documentText||'');
-            sess.setMode(args.ftype ||'ace/javascript');
+            var ftype = (typeof args.ftype !== undefined) ? args.ftype : 'ace/javascript';
+            sess.setMode(ftype);
             //load the item into the editor
             this.editor.setValue(sess.getValue());
             this.editor.gotoLine(0);
-                        
             var index = this.sessions.length;
             var newSess = $.extend({
                 session:sess,
+                owner:this,
+                changeHash:CryptoJS.MD5(sess.getValue()).toString(),
+                updateChangeStatus: function(){
+                	
+				    var hash = CryptoJS.MD5(this.owner.editor.getValue()).toString();
+				    console.log(this,this.changeHash,hash);
+				    if (this.changeHash !== hash) {
+						//this.tab.html('*');  Mark as dirty
+						//$('#hash').val(hash);
+						$('li#save').css("opacity","1")
+						$('li#save').attr('disabled','false');
+						this.changeHash=CryptoJS.MD5(this.session.getValue()).toString();
+				    } else {
+						//$('#changed').html(''); clear the dirty indicator
+						$('li#save').css("opacity","0.3");
+						$('li#save').attr('disabled','true');
+						
+					}
+					    
+				},
                 sessionId:index
             },args);
+            newSess.updateChangeStatus();
+            $('#editor').bind('keyup',$.proxy(newSess.updateChangeStatus,newSess)).bind('change',$.proxy(newSess.updateChangeStatus,newSess));
             this.activeSession = newSess;
             this.sessions.push(newSess);
             return sess;
@@ -263,6 +284,5 @@ function IDEMgr (editorEl,ftype){
         exec: mainEdit.saveFunc,
         readOnly: false // false if this command should not apply in readOnly mode
     });
-    
     return mainEdit;
 }
