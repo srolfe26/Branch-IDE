@@ -9,7 +9,7 @@ $(document).ready(function(){
 		forceMatchWin:	true,
 		afterResize:	function(){
 					        $('#app-container').height(this.matchWindow);
-					        if(branch) branch.setHeight(this.matchWindow);
+					        if(branch) branch.setHeight(this.matchWindow);			
 					    }
 	});
     
@@ -181,8 +181,9 @@ $(document).ready(function(){
     
     var TabControl = function(args){
         var me = this;
+        var el = $("<div/>").attr({id:'tab-control'});
         var params = $.extend({
-            el:         $("<div/>").attr({id:'tab-control'}),
+            el:         el,
             target:     $("#content"),
             init:       function(){
                             me.target.css('position','relative').append(me.el);
@@ -191,13 +192,22 @@ $(document).ready(function(){
                             }).keyup(function(e){
                                 if(e.keyCode == 18) me.el.css('display','none');
                             });
-                        }
+                        },
+            addTab:function (sessionItem){
+	            var tab = $("<div/>").attr({id:'session-'+sessionItem.sessionId}).html(sessionItem.name).appendTo(me.el);
+	            tab.bind('click',$.proxy(function(){this.owner.getSession(sessionItem.sessionId)},sessionItem));
+	            var tabx = $("<div/>").attr({class:'tab-close'}).appendTo(tab);
+	            
+	            
+	            
+            }
+            
         },args);
         $.extend(me,params);
         me.init();
     }
     
-    new TabControl();
+    TabMgr = new TabControl();
 	
 	//editor.on('change',statusIcon.setState("changed"));
 });
@@ -274,6 +284,7 @@ function IDEMgr (editorEl,ftype){
             $('#editor').bind('keyup',$.proxy(newSess.updateChangeStatus,newSess)).bind('change',$.proxy(newSess.updateChangeStatus,newSess));
             this.activeSession = newSess;
             this.sessions.push(newSess);
+            TabMgr.addTab(newSess);
             return sess;
         }
     };
