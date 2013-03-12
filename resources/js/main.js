@@ -197,7 +197,7 @@ $(document).ready(function(){
 	            var tab = $("<div/>").attr({id:'session-'+sessionItem.sessionId}).html(sessionItem.name).appendTo(me.el);
 	            tab.bind('click',$.proxy(function(){this.owner.getSession(sessionItem.sessionId)},sessionItem));
 	            var tabx = $("<div/>").attr({class:'tab-close'}).appendTo(tab);
-	            
+	            tabx.bind('click',$.proxy(function(){this.owner.getSession(sessionItem.sessionId)},sessionItem));
 	            
 	            
             }
