@@ -194,7 +194,7 @@ $(document).ready(function(){
                             });
                         },
             addTab:function (sessionItem){
-	            var tab = $("<div/>").attr({id:'session-'+sessionItem.sessionId}).html(sessionItem.name).appendTo(me.el);
+	            var tab = $("<div/>").attr({id:'session-'+sessionItem.sessionId}).html('<div class="tab-label">'+sessionItem.name+'</div').appendTo(me.el);
 	            tab.bind('click',$.proxy(function(){this.owner.getSession(sessionItem.sessionId)},sessionItem));
 	            var tabx = $("<div/>").attr({class:'tab-close'}).appendTo(tab);
 	            tabx.bind('click',$.proxy(function(event){console.log(arguments);this.owner.closeSession(sessionItem.sessionId)},sessionItem));
@@ -244,21 +244,25 @@ function IDEMgr (editorEl,ftype){
                 editor.gotoLine(0);
                 return sess.session;
             } else{
-                throw new Error("No such session!");
+            	 this.editor.setValue();
             }
         },
         closeSession:function(id){
-            if (typeof this.sessions[id] !== 'undefined') {
-                delete this.owner;
-                this.activeSession = this.sessions[id-1] || null ;
+            if ((this.sessions.length-1) >= 0) {
+                delete this.sessions[id];
+                this.activeSession = this.sessions[id-1] ;
                 if (typeof this.activeSession.branchPath != 'null'){
-                	this.currentPath = this.activeSession.branchPath || "";
+                	this.currentPath = this.activeSession.branchPath;
                 }
-                this.editor.setValue(this.sessions[id-1]||"");
+                console.log(id, id-1);
+                this.editor.setValue(this.sessions[id-1]);
                 editor.gotoLine(0);
-                return sess.session;
             } else{
-                throw new Error("No such session!");
+            	 this.editor.setValue('');
+                 delete this.sessions[id];
+                 this.currentPath = "";
+                 this.activeSession = null;
+                
             }	        
 	        
         },

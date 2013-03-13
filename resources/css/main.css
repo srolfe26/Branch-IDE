@@ -154,19 +154,28 @@ textarea {
 #toolbar ul li#update-all { width:20px; height:20px; margin:4px; display:none; background: url(../img/update-all.png) no-repeat 0 0; }
 #toolbar ul li#commit-all { width:20px; height:20px; margin:4px; display:none; background: url(../img/commit-all.png) no-repeat 0 0; }
 
-#tab-control {width:200px; min-height:40px; background:#555; border:#777; left:15.33%; top:0; position:absolute; z-index:10000; box-shadow:0 0 10px black; display:none; }
-
+#tab-control {width:200px; min-height:40px; background:#555; border:#777; left:15.33%; top:0; position:absolute; z-index:10000; box-shadow:0 0 10px black; display:none;	
+margin:3px;
+}
 #tab-control div {
+	background-color:RGBA(255,255,255,0.9);
+	width:100%;
+	position:relative;
+	margin:1px;
+}
+#tab-control div .tab-label {
 	
 	color:#000;
 	display:block;
 	font-size: 0.8em;
-	margin:3px;
+position:left;
 	padding: 2px;
-	background-color:RGBA(255,255,255,0.9);
+
+
+
 	
 }
-#tab-control div:hover {
+#tab-control div .tab-label:hover {
 	color:#FFF;
 	cursor:pointer;
 	background-color:RGBA(255,255,255,0.2);
@@ -174,10 +183,11 @@ textarea {
 #tab-control div .tab-close {
 	width: 17px;
 	height: 16px;
+	position:relative;
 	background: url(../img/icon-sprites.png) 17px 0px;
-	position: relative;
-	top: -2px;
-	float: right;
+	float:right;
+	top:-20px;
+
 }
 #tab-control div .tab-close:hover {
 	background-position-y:-32px;
