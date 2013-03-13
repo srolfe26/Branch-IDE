@@ -197,7 +197,7 @@ $(document).ready(function(){
 	            var tab = $("<div/>").attr({id:'session-'+sessionItem.sessionId}).html(sessionItem.name).appendTo(me.el);
 	            tab.bind('click',$.proxy(function(){this.owner.getSession(sessionItem.sessionId)},sessionItem));
 	            var tabx = $("<div/>").attr({class:'tab-close'}).appendTo(tab);
-	            tabx.bind('click',$.proxy(function(){this.owner.getSession(sessionItem.sessionId)},sessionItem));
+	            tabx.bind('click',$.proxy(function(event){console.log(arguments);this.owner.closeSession(sessionItem.sessionId)},sessionItem));
 	            
 	            
             }
@@ -239,13 +239,28 @@ function IDEMgr (editorEl,ftype){
         getSession:function(id){
             if (typeof this.sessions[id] !== 'undefined') {
                 var sess = this.activeSession = this.sessions[id];
-                this.currentPath = this.activeSession.branchPathl
+                this.currentPath = this.activeSession.branchPath;
                 this.editor.setValue(sess.session.getValue());
                 editor.gotoLine(0);
                 return sess.session;
             } else{
                 throw new Error("No such session!");
             }
+        },
+        closeSession:function(id){
+            if (typeof this.sessions[id] !== 'undefined') {
+                delete this.owner;
+                this.activeSession = this.sessions[id-1] || null ;
+                if (typeof this.activeSession.branchPath != 'null'){
+                	this.currentPath = this.activeSession.branchPath || "";
+                }
+                this.editor.setValue(this.sessions[id-1]||"");
+                editor.gotoLine(0);
+                return sess.session;
+            } else{
+                throw new Error("No such session!");
+            }	        
+	        
         },
         newSession:function(args){
             
