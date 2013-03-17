@@ -160,6 +160,7 @@ textarea {
     background:#BBBBBB;
     top:0;
     position:relative;
+    border-bottom:1px solid black;
 }
 #tab-control div.session {
 	background-color:white;
@@ -168,13 +169,14 @@ textarea {
 	float:left;
     border-left:1px solid black;
     border-right:1px solid black;
-    border-bottom:none;
-    margin-top:7px;
+    border-bottom:1px solid black;
+    margin-top:6px;
     margin-left:2px;
     border-top:3px solid #777777;
 }
 #tab-control div.session.selected {
     border-top:3px solid #03DB00;
+    border-bottom:1px solid white;
 }
 #tab-control div.session .tab-label {
 	color:#000;
