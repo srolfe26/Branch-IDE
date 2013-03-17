@@ -173,6 +173,8 @@ textarea {
     margin-top:6px;
     margin-left:2px;
     border-top:3px solid #777777;
+    border-top-right-radius:5px;
+    border-top-left-radius:5px;
 }
 #tab-control div.session.selected {
     border-top:3px solid #03DB00;
