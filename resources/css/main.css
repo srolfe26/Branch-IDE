@@ -102,11 +102,11 @@ textarea {
 #app-container {height:500px; width:100%;}
 #col-left, #branch-wrapper, #editor {height:100%;}
 
-#col-left {width:15%; margin-right:0.33%; float:left; background:#bbb;}
+#col-left {width:15%; /*min-width:230px;*/ margin-right:0.33%; float:left; background:#bbb;}
     #branch-wrapper {padding-bottom:36px; overflow:hidden;}
     #toolbar {width:100%; height:26px; margin:-46px 0;}
-
-#editor {width:84.67%; float:right; position:relative; top: 0; right: 0; bottom: 0; left: 0; background:#fff;}
+#main-content {width:84.67%; float:right; position:relative; }
+#editor {width:100%; position:relative; top: 0px; right: 0; bottom: 0; left: 0; background:#fff;}
     div.ace_scroller { padding-top:0.25em;} div.ace_gutter {margin-top:0.25em;}
 .branchjs-search-node, .branchjs-node {overflow:hidden; position: relative;}
 .branchjs-search-node a, .branchjs-node a, .branchjs-search, .branchjs-search input{
@@ -154,42 +154,51 @@ textarea {
 #toolbar ul li#update-all { width:20px; height:20px; margin:4px; display:none; background: url(../img/update-all.png) no-repeat 0 0; }
 #toolbar ul li#commit-all { width:20px; height:20px; margin:4px; display:none; background: url(../img/commit-all.png) no-repeat 0 0; }
 
-#tab-control {width:200px; min-height:40px; background:#555; border:#777; left:15.33%; top:0; position:absolute; z-index:10000; box-shadow:0 0 10px black; display:none;	
-margin:3px;
+#tab-control {
+    width:100%;
+    height:32px;
+    background:#BBBBBB;
+    top:0;
+    position:relative;
 }
-#tab-control div {
-	background-color:RGBA(255,255,255,0.9);
-	width:100%;
+#tab-control div.session {
+	background-color:white;
+	width:136px;
 	position:relative;
-	margin:1px;
+	float:left;
+    border-left:1px solid black;
+    border-right:1px solid black;
+    border-bottom:none;
+    margin-top:7px;
+    margin-left:2px;
+    border-top:3px solid #777777;
 }
-#tab-control div .tab-label {
-	
+#tab-control div.session.selected {
+    border-top:3px solid #03DB00;
+}
+#tab-control div.session .tab-label {
 	color:#000;
 	display:block;
 	font-size: 0.8em;
-position:left;
+    position:relative;
 	padding: 2px;
-
-
-
-	
+    cursor:pointer;
+    float:left;
+    width:117px;
 }
-#tab-control div .tab-label:hover {
-	color:#FFF;
+#tab-control div.session .tab-label:hover {
 	cursor:pointer;
-	background-color:RGBA(255,255,255,0.2);
+	/*background-color:RGBA(255,255,255,0.2);*/
 }
-#tab-control div .tab-close {
+#tab-control div.session .tab-close {
 	width: 17px;
 	height: 16px;
 	position:relative;
-	background: url(../img/icon-sprites.png) 17px 0px;
+	background: url(../img/icon-sprites.png) no-repeat -144px 0px;
 	float:right;
-	top:-20px;
-
+	top:3px;
 }
-#tab-control div .tab-close:hover {
+#tab-control div.session .tab-close:hover {
 	background-position-y:-32px;
 	cursor:pointer;
 }

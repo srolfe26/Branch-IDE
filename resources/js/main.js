@@ -9,33 +9,13 @@ $(document).ready(function(){
 		forceMatchWin:	true,
 		afterResize:	function(){
 					        $('#app-container').height(this.matchWindow);
+                            $('#main-content').height(this.matchWindow);
 					        if(branch) branch.setHeight(this.matchWindow);			
 					    }
 	});
     
     mainEdit = new IDEMgr('editor');
     editor = mainEdit.editor;
-	
-	function changedIcon() {
-		var me = {
-			currState: 	"saved",
-			el:			$("ul li#status"),
-			setState: 	function(newState) {
-							// options are saved, changed, or loading
-							me.currState = newState;
-							me.setClass(newState);
-						},
-			getState: 	function() {
-							return me.currState;
-						},
-			setClass:	function(newClass) {
-							me.el.attr('class',newClass);
-						}
-		}
-		return me;
-	};
-	
-	var statusIcon = new changedIcon();
 	
     branch = new bjsBranch({
        el:              $("#branch-wrapper"),
@@ -181,27 +161,34 @@ $(document).ready(function(){
     
     var TabControl = function(args){
         var me = this;
-        var el = $("<div/>").attr({id:'tab-control'});
         var params = $.extend({
-            el:         el,
-            target:     $("#content"),
+            el:         $("#tab-control"),
+            //target:     $("#content"),
             init:       function(){
-                            me.target.css('position','relative').append(me.el);
+                            //me.target.css('position','relative').append(me.el);
+                            // cant do alt in firefox
                             $(document).keydown(function(e){
-                                if(e.keyCode == 18) me.el.css('display','block').focus();   //18 = alt
+                                //if(e.keyCode == 18) me.el.css('display','block').focus();   //18 = alt
                             }).keyup(function(e){
-                                if(e.keyCode == 18) me.el.css('display','none');
+                                //if(e.keyCode == 18) me.el.css('display','none');
                             });
                         },
-            addTab:function (sessionItem){
-	            var tab = $("<div/>").attr({id:'session-'+sessionItem.sessionId}).html('<div class="tab-label">'+sessionItem.name+'</div').appendTo(me.el);
-	            tab.bind('click',$.proxy(function(){this.owner.getSession(sessionItem.sessionId)},sessionItem));
-	            var tabx = $("<div/>").attr({class:'tab-close'}).appendTo(tab);
-	            tabx.bind('click',$.proxy(function(event){console.log(arguments);this.owner.closeSession(sessionItem.sessionId)},sessionItem));
-	            
-	            
-            }
-            
+            setActiveColor: function(tab) {
+                            var sessions = $('.session');
+                            $.each(sessions,function(){
+                                $(this).removeClass('selected');
+                            });
+                            tab.addClass('selected');
+                        },
+            addTab:     function (sessionItem){
+                            var tab = $("<div/>").attr({id:'session-'+sessionItem.sessionId, class:
+                            'session'}).html('<div class="tab-label">'+sessionItem.name+'</div').appendTo(me.el);
+                            me.setActiveColor(tab);
+                            tab.bind('click',$.proxy(function(){this.owner.getSession(sessionItem.sessionId); me.setActiveColor(tab);},sessionItem));
+                            var tabx = $("<div/>").attr({class:'tab-close'}).appendTo(tab);
+                            tabx.bind('click',$.proxy(function(event){console.log(arguments);this.owner.closeSession(sessionItem.sessionId)},sessionItem));
+                            // this tabx still needs to delete tab div from dom and goto the next closest file
+                        }
         },args);
         $.extend(me,params);
         me.init();
@@ -280,12 +267,32 @@ function IDEMgr (editorEl,ftype){
                 owner:this,
                 changeHash:CryptoJS.MD5(sess.getValue()).toString(),
                 updateChangeStatus: function(){
-                	
+                	function changedIcon() {
+                        var me = {
+                            currState: 	"saved",
+                            el:			$("ul li#status"),
+                            setState: 	function(newState) {
+                                            // options are saved, changed, or loading
+                                            me.currState = newState;
+                                            me.setClass(newState);
+                                        },
+                            getState: 	function() {
+                                            return me.currState;
+                                        },
+                            setClass:	function(newClass) {
+                                            me.el.attr('class',newClass);
+                                        }
+                        }
+                        return me;
+                    };
+                    var statusIcon = new changedIcon();
+                    
 				    var hash = CryptoJS.MD5(this.owner.editor.getValue()).toString();
 				    console.log(this,this.changeHash,hash);
 				    if (this.changeHash !== hash) {
 						//this.tab.html('*');  Mark as dirty
 						//$('#hash').val(hash);
+                        statusIcon.setState("changed");
 						$('li#save').css("opacity","1")
 						$('li#save').attr('disabled','false');
 						this.changeHash=CryptoJS.MD5(this.session.getValue()).toString();
@@ -293,7 +300,7 @@ function IDEMgr (editorEl,ftype){
 						//$('#changed').html(''); clear the dirty indicator
 						$('li#save').css("opacity","0.3");
 						$('li#save').attr('disabled','true');
-						
+						statusIcon.setState("saved");
 					}
 					    
 				},
