@@ -16,7 +16,7 @@ searchNode = function(data, parent){
 							me.rt.beforeAddSearch(me);
 							
 							//Add each child element based on data passed in
-							for(item in me.data){ me.addChild(me.data[item]); }
+							for(var item in me.data){ me.addChild(me.data[item]); }
 							
 							//adjust height of container dependent on depth and lock parent to keep it from scrolling
 							me.el.children("." + me.childClass)
@@ -31,7 +31,7 @@ searchNode = function(data, parent){
 							var retSiblings = [];
 							if(me.parent instanceof searchNode){
 								var parentsKids = me.parent.children;
-								for(aNode in parentsKids) if(parentsKids[aNode] !== me) retSiblings.push(parentsKids[aNode]);
+								for(var aNode in parentsKids) if(parentsKids[aNode] !== me) retSiblings.push(parentsKids[aNode]);
 							}
 							return retSiblings;
 						},
@@ -84,7 +84,7 @@ bjsNode = function(data, parent){
 							me.rt.beforeAddKids(me);
 							
 							//Add each child element
-							for(item in data){ me.addChild(data[item]); }
+							for(var item in data){ me.addChild(data[item]); }
 							
 							if(me.getDepth() == 0)	me.rt.init();
 							else					me.renderChildren();
@@ -118,7 +118,7 @@ bjsNode = function(data, parent){
 							var retSiblings = [];
 							if(me.parent instanceof bjsNode){
 								var parentsKids = me.parent.children;
-								for(aNode in parentsKids) if(parentsKids[aNode] !== me) retSiblings.push(parentsKids[aNode]);
+								for(var aNode in parentsKids) if(parentsKids[aNode] !== me) retSiblings.push(parentsKids[aNode]);
 							}
 							return retSiblings;
 						},				
@@ -132,7 +132,7 @@ bjsNode = function(data, parent){
 							if(me.selected || (me.parent instanceof bjsBranch)){
 								var selectedChild = false;
 								
-								for(aNode in me.children){
+								for(var aNode in me.children){
 									var isSelected = me.children[aNode].selected;
 									if(isSelected !== false){
 										selectedChild = me.children[aNode];
@@ -249,7 +249,7 @@ bjsNode = function(data, parent){
 						
 		remove:		function(){
 							me.el.remove();
-							for(child in me.parent.children){
+							for(var child in me.parent.children){
 								if(me.parent.children[child] == me){
 									me.parent.children.splice(child,1);
 									break;
@@ -258,7 +258,7 @@ bjsNode = function(data, parent){
 						},
 						
 		renderChildren: function(){
-							for(theNode in me.children) me.children[theNode].render();
+							for(var theNode in me.children) me.children[theNode].render();
 						}
 	});
 	
@@ -315,7 +315,7 @@ bjsBranch = function(args){
                     		    if(origHeight != me.height)   me.root.adjChildrenHt();
                     		},					
 		
-		clearTreeNodes:		function(){ for(child in me.root.children) me.root.children[child].hide(true); },
+		clearTreeNodes:		function(){ for(var child in me.root.children) me.root.children[child].hide(true); },
 		
 		delayForAnimation:	function(fn){ setTimeout(fn, me.trnSpeed + 100); },
 		
@@ -405,7 +405,7 @@ bjsBranch = function(args){
 									var nodeToSelect	= false;
 									
 									//check for a node having an id matching the first element of the path
-									for(aNode in nph.children){
+									for(var aNode in nph.children){
 										if(nph.children[aNode].data.id == me.gotoNodePath[0]){
 											nodeToSelect = nph.children[aNode];
 											break;
