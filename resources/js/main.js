@@ -3,7 +3,7 @@ var branch = null;
 
 $(document).ready(function(){
     //viewport
-	Condor.vp = new Condor.Viewport({
+	var vp = new Wui.viewport({
 		vp:				$('#content'),
 		DOMNodeAdded:	function(){},
 		forceMatchWin:	true,
@@ -130,33 +130,41 @@ $(document).ready(function(){
     });
     
     $('ul li#newfile').on('click',function(){
-        var newFile = new Condor.textFrmObj({id:'ide_filename', passedCls: 'condor-modal-form-item'}); 
-        var steve = new Condor.modalWindow({
-            title: "Create a New File",
-            content: [
-                new Condor.formLabel({
-                    text:'File Name:'
-                }),
-                newFile],
-            bbar: [
-                new Condor.btn({ text: 'Create New File' }),
-                new Condor.btn({ text: 'Cancel' })
-            ],
-            width: 600,
-            height: 200
+        var win = new Wui.window({
+	        title:	'Create a New File',
+	        height:	200,
+	        items:	[
+			        	new Wui.form({
+				        	labelPos:'left',
+				        	items:	[
+						        		{ftype:'Wui.text', label:'File Name:', required:true, name:'newFile'}
+						        	]
+			        	})
+			        ],
+	        bbar:	[
+			        	new Wui.button({ text: 'Cancel', click:function(){win.close();} }),
+			        	new Wui.button({
+			        		text:	'Create New File',
+			        		click:	function(){
+				        				var frmData = win.items[0].getData();
+				        				if(frmData !== false){
+					        				var newFilePath = mainEdit.currentPath + frmData.newFile;
+								            // tcl data/editor-interactions
+								            $.ajax('php/editor-interactions.php', {
+					                            type:		'post',
+					                            data:       {xaction:'create',path:newFilePath},
+					                            success:    function(d){ 
+					                            				Wui.Msg(frmData.newFile + ' Created');
+					                            				
+					                            			},
+					                            error:      function(e){ Wui.errRpt('The file could not be created.'); }
+					                        });
+								            win.close();
+				        				}
+			        				}
+			        	})
+			        ]
         });
-        
-        steve.bbar[0].click = function(){
-            var newFilePath = mainEdit.currentPath + newFile.val();
-            //$.post("data/editor-interactions",{xaction:'create',path:newFilePath});
-            $.post("php/editor-interactions.php",{xaction:'create',path:newFilePath});
-            steve.close();
-        };
-        
-        steve.bbar[1].click = function(){
-            steve.close();
-        };
-        
     });
     
     var TabControl = function(args){

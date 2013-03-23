@@ -1,1 +1,7 @@
 /.project
+
+.DS_Store
+
+resources/js/.DS_Store
+
+resources/js/vendor/.DS_Store

@@ -56,6 +56,8 @@ class webide {
     	 * @creation-date 2013-2-2
 		 */
 		
+		date_default_timezone_set('America/Denver');
+		
 		$recordsArr = array();
 		// should always be passed in, but just in case...
 		if (empty($path)) {
