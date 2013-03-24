@@ -105,8 +105,23 @@ textarea {
 #col-left {width:15%; /*min-width:230px;*/ margin-right:0.33%; float:left; background:#bbb;}
     #branch-wrapper {padding-bottom:36px; overflow:hidden;}
     #toolbar {width:100%; height:26px; margin:-46px 0;}
-#main-content {width:84.67%; float:right; position:relative; }
-#editor {width:100%; position:relative; top: 0px; right: 0; bottom: 0; left: 0; background:#fff;}
+
+#main-content {width:84.67%; float:right; position:relative; padding-top:8px; }
+	#tab-control {width:100%; position: absolute; top:0; left:0; height:8px;}
+	.tab-item {
+		width:200px; height:100%; background-color: #999; margin:0 3px 0 0; float:left; overflow:hidden; position: relative;
+		-webkit-transition: all 0.25s linear; -moz-transition: all 0.25s linear; -o-transition: all 0.25s linear; transition: all 0.25s linear;
+	}
+	.tab-item * {-webkit-opacity:0; -moz-opacity:0; opacity:0;}
+	.tab-item.selected {background-color:black;}
+	.tab-item.selected.changed {background:red;}
+	.tab-item.changed {background:#ff9a00;}
+	.tab-item:hover {background:white !important; height:32px; color:#555; border:1px solid #999; z-index:10; border-top: 0; box-shadow: 0 0 8px rgba(0,0,0,0.5);}
+	.tab-item:hover * {-webkit-opacity:100; -moz-opacity:100; opacity:100;}
+		.tab-close {position: absolute; top:0; right:0; width:30px; height:100%; line-height: 32px; outline: none; margin:0 !important; padding:0; text-align: center; text-decoration: none; }
+		.tab-label {width:100%; padding:0 33px 0 0.5em; line-height:32px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; display: inline-block; font-size: 0.8em;}
+
+#editor {width:100%; position:relative; top: 0px; right: 0; bottom: 0; left: 0; background:#fff; z-index:0 !important;}
     div.ace_scroller { padding-top:0.25em;} div.ace_gutter {margin-top:0.25em;}
 .branchjs-search-node, .branchjs-node {overflow:hidden; position: relative;}
 .branchjs-search-node a, .branchjs-node a, .branchjs-search, .branchjs-search input{
@@ -141,71 +156,18 @@ textarea {
 .dir-item.ftype-dir > span.icon { background-position: -32px -16px;}
 
 #toolbar ul li {width:16px; height:16px; background: url(../img/icon-sprites.png) 0 0 no-repeat; text-indent: -400em; list-style:none; float:right; margin:6px; cursor:pointer;}
-#toolbar ul li#save { background-position: -48px 0;}
 #toolbar ul li:hover { background-position-y:-16px; }
+
+#toolbar ul li#save { background-position: -48px 0;}
+#toolbar ul li#save.changed { background-position: -48px -48px;}
+#toolbar ul li#save.changed:hover { background-position-y:-48px;}
 
 #toolbar ul li#github { width: 21px; height: 20px; background: url(../img/github.png) no-repeat 0 0; margin-top: 3px; }
 #toolbar ul li#github.selected { background-position: -21px 0; }
 
-#toolbar ul li#status.saved { background: url(../img/status-saved.png) no-repeat 0 0; }
-#toolbar ul li#status.loading { background: url(../img/status-loading.gif) no-repeat 0 0; }
-#toolbar ul li#status.changed{ background: url(../img/status-changed.png) no-repeat 0 0; }
-
 #toolbar ul li#update-all { width:20px; height:20px; margin:4px; display:none; background: url(../img/update-all.png) no-repeat 0 0; }
 #toolbar ul li#commit-all { width:20px; height:20px; margin:4px; display:none; background: url(../img/commit-all.png) no-repeat 0 0; }
 
-#tab-control {
-    width:100%;
-    height:32px;
-    background:#BBBBBB;
-    top:0;
-    position:relative;
-    border-bottom:1px solid black;
-}
-#tab-control div.session {
-	background-color:white;
-	width:136px;
-	position:relative;
-	float:left;
-    border-left:1px solid black;
-    border-right:1px solid black;
-    border-bottom:1px solid black;
-    margin-top:6px;
-    margin-left:2px;
-    border-top:3px solid #777777;
-    border-top-right-radius:5px;
-    border-top-left-radius:5px;
-}
-#tab-control div.session.selected {
-    border-top:3px solid #03DB00;
-    border-bottom:1px solid white;
-}
-#tab-control div.session .tab-label {
-	color:#000;
-	display:block;
-	font-size: 0.8em;
-    position:relative;
-	padding: 2px;
-    cursor:pointer;
-    float:left;
-    width:117px;
-}
-#tab-control div.session .tab-label:hover {
-	cursor:pointer;
-	/*background-color:RGBA(255,255,255,0.2);*/
-}
-#tab-control div.session .tab-close {
-	width: 17px;
-	height: 16px;
-	position:relative;
-	background: url(../img/icon-sprites.png) no-repeat -144px 0px;
-	float:right;
-	top:3px;
-}
-#tab-control div.session .tab-close:hover {
-	background-position-y:-32px;
-	cursor:pointer;
-}
 /* ==========================================================================
    Helper classes
    ========================================================================== */
