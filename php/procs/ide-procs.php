@@ -74,6 +74,12 @@ class webide {
 						$filetype = "";
 						$type = "dir";
 						$itemcnt = count(glob($entry . "*"));;
+						$dir = new DirectoryIterator($entry);
+						$itemcnt = 0;
+						//Loop on selected directory contents to get file count
+						foreach($dir as $file ){
+						  $itemcnt += ($file->isFile()) ? 1 : 0;
+						}
 					} else if (is_file($entry)) {
 						$filetype = pathinfo($entry, PATHINFO_EXTENSION);
 						$type = "file";

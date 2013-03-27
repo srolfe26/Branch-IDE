@@ -266,6 +266,7 @@ function IDEMgr (editorEl,ftype){
         },
         getSession:function(id){
             if (typeof this.sessions[id] !== 'undefined') {
+            	this.activeSession.session.setValue(this.editor.getValue());
                 var sess = this.activeSession = this.sessions[id];
                 this.currentPath = this.activeSession.branchPath;
                 this.editor.setValue(sess.session.getValue());
@@ -305,15 +306,16 @@ function IDEMgr (editorEl,ftype){
             var newSess = $.extend({
                 session:sess,
                 owner:this,
+                origHash:CryptoJS.MD5(sess.getValue()).toString(),
                 changeHash:CryptoJS.MD5(sess.getValue()).toString(),
                 updateChangeStatus: function(evt){
                 	if(this.owner.activeSession === evt.data){	//evt.data is the newSess variable that got passed to the editor listener
-	                	var hash = CryptoJS.MD5(this.owner.editor.getValue()).toString();
-					    if (this.changeHash !== hash) {
+	                	this.changeHash=CryptoJS.MD5(this.owner.editor.getValue()).toString();
+
+					    if (this.origHash !== this.changeHash) {
 	                        $('#save').addClass('changed').css("opacity","1").attr('disabled','false');
 	                        if(this.tab){ this.tab.el.addClass('changed'); }
-							this.changeHash=CryptoJS.MD5(this.session.getValue()).toString();
-					    } else {
+												    } else {
 							$('#save').removeClass('changed');
 						} 	
                 	}
