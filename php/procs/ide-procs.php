@@ -73,7 +73,6 @@ class webide {
 					if (is_dir($entry)) {
 						$filetype = "";
 						$type = "dir";
-						$itemcnt = count(glob($entry . "*"));;
 						$dir = new DirectoryIterator($entry);
 						$itemcnt = 0;
 						//Loop on selected directory contents to get file count
