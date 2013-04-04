@@ -516,14 +516,14 @@ Wui.form = function(args){
     	                for(var i in me.items) if(me.items[i].name == fieldname)me.items[i].val(d);
                 	},
     	dataValid:  null,
+    	onItems:	function(f){
+    					$.each(this.items,function(idx,itm){
+				    		if(itm.val && typeof itm.val == 'function')	f(itm);
+			    		});
+			    	}
     	validate:   function(){
     	                me.errs = [];
-    	                for(var i in me.items){
-    	                    if(me.items[i].el.removeClass) me.items[i].el.removeClass(me.errCls);
-    	                    if(me.items[i].hasOwnProperty('validate') && typeof me.items[i].validate == 'function')
-                                if(!me.items[i].validate())
-                                    if(me.items[i].el.addClass) me.items[i].el.addClass(me.errCls);
-    	                }
+    	                me.onItems(function(itm){ itm.el.toggleClass(me.errCls,!itm.validate()); });
     	                return (me.errs.length == 0);
                 	},
         errs:       [],
@@ -534,21 +534,13 @@ Wui.form = function(args){
                         Wui.errRpt(msg,'Form Errors')
                     },
         setData:    function(d){
-                        for(var i in me.items)
-                            if(me.items[i].hasOwnProperty('val') && typeof me.items[i].val == 'function')
-                                me.items[i].val(d[me.items[i].name]);
+                        me.onItems(function(itm){ itm.val(d[itm.name] || null); });
                     },
-        clearData:  function(d){
-                        for(var i in me.items)
-                            if(me.items[i].hasOwnProperty('val') && typeof me.items[i].val == 'function')
-                                me.items[i].val(null);
-                    },
+        clearData:  function(d){ me.setData(); },
         getData:    function(){
                         if(me.validate()){
                             var ret = {};
-                            for(var i in me.items)
-                                if(me.items[i].hasOwnProperty('val') && typeof me.items[i].val == 'function')
-                                    ret[me.items[i].name] = me.items[i].val();
+                            me.onItems(function(itm){ ret[itm.name] = itm.val(); }
                             return ret;
                         }else{
                             me.dispErrs();
@@ -557,11 +549,11 @@ Wui.form = function(args){
                     },
     	isReady:	function(){},
     	createForm: function(){
-    	                for(var itm in me.items){
-							objArry = me.items[itm].ftype.split('.');
-    	                    me.items[itm] = new window[objArry[0]][objArry[1]]($.extend(me.items[itm],{parentFrm:me}));
-    	                    me.el.append(me.items[itm].el);
-						}
+    	                $.each(this.items,function(idx,itm){
+							objArry = itm.ftype.split('.');
+    	                    itm = new window[objArry[0]][objArry[1]]($.extend(itm,{parentFrm:me}));
+    	                    me.el.append(itm.el);
+						});
 						me.afterCreate();
 				    },
         afterCreate:function(){},
