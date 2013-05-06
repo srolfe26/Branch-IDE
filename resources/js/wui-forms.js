@@ -520,7 +520,7 @@ Wui.form = function(args){
     					$.each(this.items,function(idx,itm){
 				    		if(itm.val && typeof itm.val == 'function')	f(itm);
 			    		});
-			    	}
+			    	},
     	validate:   function(){
     	                me.errs = [];
     	                me.onItems(function(itm){ itm.el.toggleClass(me.errCls,!itm.validate()); });
