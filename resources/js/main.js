@@ -15,6 +15,7 @@ $(document).ready(function(){
 	});
     
     mainEdit = new IDEMgr('editor');
+
     editor = mainEdit.editor;
 	
     branch = new bjsBranch({
@@ -266,11 +267,15 @@ function IDEMgr (editorEl,ftype){
         },
         getSession:function(id){
             if (typeof this.sessions[id] !== 'undefined') {
-            	this.activeSession.session.setValue(this.editor.getValue());
+            console.log(this,this.activeSession.sessionId );
+            	//this.activeSession.session.setValue(this.editor.getSession().getValue());
+            	this.sessions[this.activeSession.sessionId].session = this.editor.getSession();
+            	
                 var sess = this.activeSession = this.sessions[id];
                 this.currentPath = this.activeSession.branchPath;
-                this.editor.setValue(sess.session.getValue());
-                editor.gotoLine(0);
+                this.editor.setSession(this.activeSession.session);
+                //this.editor.setValue(sess.session.getValue());
+                this.editor.gotoLine(0);
                 return sess.session;
             } else{
             	 this.editor.setValue();
@@ -298,7 +303,7 @@ function IDEMgr (editorEl,ftype){
             var sess = new EditSession(args.documentText||'');
             	sess.setMode((typeof args.ftype !== undefined) ? args.ftype : 'ace/javascript');
             	sess.setUseSoftTabs(true); //use spaces instead of tabs
-
+            this.editor.setSession(sess);
             //load the item into the editor
             this.editor.setValue(sess.getValue());
             this.editor.gotoLine(0);
@@ -315,8 +320,9 @@ function IDEMgr (editorEl,ftype){
 					    if (this.origHash !== this.changeHash) {
 	                        $('#save').addClass('changed').css("opacity","1").attr('disabled','false');
 	                        if(this.tab){ this.tab.el.addClass('changed'); }
-												    } else {
+						} else {
 							$('#save').removeClass('changed');
+							if(this.tab){ this.tab.el.removeClass('changed'); }
 						} 	
                 	}
 				},

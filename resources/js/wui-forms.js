@@ -540,7 +540,7 @@ Wui.form = function(args){
         getData:    function(){
                         if(me.validate()){
                             var ret = {};
-                            me.onItems(function(itm){ ret[itm.name] = itm.val(); }
+                            me.onItems(function(itm){ ret[itm.name] = itm.val(); });
                             return ret;
                         }else{
                             me.dispErrs();
