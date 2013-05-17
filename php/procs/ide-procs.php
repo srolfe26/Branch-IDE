@@ -1,5 +1,7 @@
 <?php
 
+include('ignore-list.php');
+
 class webide {
 	public static function open_file ($path) {
 	 /**   
@@ -56,6 +58,7 @@ class webide {
     	 * @creation-date 2013-2-2
 		 */
 		
+        global $excludeArr;
 		date_default_timezone_set('America/Denver');
 		
 		$recordsArr = array();
@@ -69,6 +72,8 @@ class webide {
 				
 				while (($entry = readdir($handle)) != false) {
 					if ($entry == '.' || $entry == '..') continue;
+                    // skip anything in the ignore file list
+                    if (in_array($entry, $excludeArr)) continue;
 					$entry = $path . $entry;
 					if (is_dir($entry)) {
 						$filetype = "";
@@ -104,7 +109,13 @@ class webide {
 				closedir($handle);
 			}
 		}
-		
+        foreach ($recordsArr as $rec) {
+            $dirs[] = $rec['filetype'];
+            $names[] = $rec['name'];
+        }
+		array_multisort($dirs, SORT_ASC,
+                        $names, SORT_ASC,
+                        $recordsArr);
 		return $recordsArr;
 	}
 
